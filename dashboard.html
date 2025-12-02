@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% block content %}
+<h1>Dashboard</h1>
+<div class="row">
+  <div class="col-md-3"><div class="card p-3">Total emprestado<br><strong>R$ {{"%.2f" % total_principal}}</strong></div></div>
+  <div class="col-md-3"><div class="card p-3">Total com juros<br><br><strong>R$ {{"%.2f" % total_amount}}</strong></div></div>
+  <div class="col-md-3"><div class="card p-3">A receber<br><br><strong>R$ {{"%.2f" % total_to_receive}}</strong></div></div>
+  <div class="col-md-3"><div class="card p-3">Atrasado<br><br><strong>R$ {{"%.2f" % total_overdue}}</strong></div></div>
+</div>
+
+<h3 class="mt-4">Próximas parcelas (7 dias)</h3>
+<table class="table table-striped">
+  <thead><tr><th>Cliente</th><th>Empréstimo</th><th>Parcela</th><th>Vencimento</th><th>Valor</th><th>Ação</th></tr></thead>
+  <tbody>
+    {% for inst in upcoming %}
+    <tr>
+      <td>{{inst.loan.client.name}}</td>
+      <td><a href="/loans/{{inst.loan.id}}">#{{inst.loan.id}}</a></td>
+      <td>{{inst.number}}</td>
+      <td>{{inst.due_date}}</td>
+      <td>R$ {{"%.2f" % inst.amount}}</td>
+      <td>
+        <form action="/installment/{{inst.id}}/pay" method="post">
+          <button class="btn btn-success btn-sm">Marcar paga</button>
+        </form>
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+{% endblock %}

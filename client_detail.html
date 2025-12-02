@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% block content %}
+<h1>{{client.name}}</h1>
+<p>Telefone: {{client.phone}}<br>CPF: {{client.cpf}}<br>Email: {{client.email}}</p>
+<h3>Empréstimos</h3>
+<table class="table">
+  <thead><tr><th>ID</th><th>Principal</th><th>Com Juros</th><th>Criado</th><th>Ação</th></tr></thead>
+  <tbody>
+    {% for l in client.loans %}
+    <tr>
+      <td><a href="/loans/{{l.id}}">#{{l.id}}</a></td>
+      <td>R$ {{"%.2f" % l.principal}}</td>
+      <td>R$ {{"%.2f" % l.total_amount()}}</td>
+      <td>{{l.created_at.date()}}</td>
+      <td><a class="btn btn-sm btn-primary" href="/loans/{{l.id}}">Abrir</a></td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

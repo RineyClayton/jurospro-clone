@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% block content %}
+<h1>Empréstimo #{{loan.id}}</h1>
+<p>Cliente: <a href="/clients/{{loan.client.id}}">{{loan.client.name}}</a><br>
+Principal: R$ {{"%.2f" % loan.principal}}<br>
+Com juros: R$ {{"%.2f" % loan.total_amount()}}<br>
+Notas: {{loan.notes}}</p>
+
+<h3>Parcelas</h3>
+<table class="table">
+  <thead><tr><th>#</th><th>Vencimento</th><th>Valor</th><th>Pago</th><th>Ação</th></tr></thead>
+  <tbody>
+    {% for p in loan.installments %}
+    <tr class="{% if not p.paid and p.is_overdue() %}table-danger{% endif %}">
+      <td>{{p.number}}</td>
+      <td>{{p.due_date}}</td>
+      <td>R$ {{"%.2f" % p.amount}}</td>
+      <td>{% if p.paid %}Sim ({{p.paid_at.date()}}){% else %}Não{% endif %}</td>
+      <td>
+        {% if not p.paid %}
+        <form method="post" action="/installment/{{p.id}}/pay"><button class="btn btn-sm btn-success">Marcar paga</button></form>
+        {% endif %}
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

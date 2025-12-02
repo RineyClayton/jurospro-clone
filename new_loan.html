@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+{% block content %}
+<h1>Novo Empréstimo</h1>
+<form method="post">
+  <div class="mb-3"><label>Cliente</label>
+    <select name="client_id" class="form-select">
+      {% for c in clients %}
+      <option value="{{c.id}}">{{c.name}}</option>
+      {% endfor %}
+    </select>
+  </div>
+  <div class="mb-3"><label>Valor principal (R$)</label><input required name="principal" class="form-control" type="number" step="0.01"></div>
+  <div class="mb-3"><label>Taxa de juros (%)</label><input name="interest_rate" class="form-control" type="number" step="0.01"></div>
+  <div class="mb-3"><label>Parcelas</label><input name="parcels" class="form-control" type="number" value="1"></div>
+  <div class="mb-3"><label>Primeiro vencimento</label><input name="first_due" class="form-control" type="date" required></div>
+  <div class="mb-3"><label>Notas</label><textarea name="notes" class="form-control"></textarea></div>
+  <button class="btn btn-primary">Criar Empréstimo</button>
+</form>
+{% endblock %}
