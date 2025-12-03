@@ -18,6 +18,7 @@ db = SQLAlchemy(app)
 login_manager = LoginManager(app)
 login_manager.login_view = "login"
 
+
 # --------------------------------------------------------------------
 # MODELOS
 # --------------------------------------------------------------------
@@ -67,7 +68,7 @@ class Installment(db.Model):
 
 
 # --------------------------------------------------------------------
-# LOGIN
+# LOGIN MANAGER
 # --------------------------------------------------------------------
 @login_manager.user_loader
 def load_user(user_id):
@@ -75,13 +76,13 @@ def load_user(user_id):
 
 
 # --------------------------------------------------------------------
-# AUTOSETUP — BANCO + ADMIN
+# AUTO-CREATE DB + ADMIN (FUNCIONA NO RENDER)
 # --------------------------------------------------------------------
-@app.before_first_request
-def initialize():
+with app.app_context():
     db.create_all()
 
-    if not User.query.filter_by(username="admin").first():
+    admin = User.query.filter_by(username="admin").first()
+    if not admin:
         u = User(username="admin")
         u.set_password("123456")
         db.session.add(u)
